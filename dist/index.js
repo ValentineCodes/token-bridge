@@ -66,21 +66,18 @@ app.listen(PORT, () => {
         console.log("listening for deposits...");
         // console.log("-----");
         vault.on("Deposit", (depositor, amount, nonce) => __awaiter(void 0, void 0, void 0, function* () {
-            // console.log(
-            //   `deposited ${ethers.utils.formatEther(amount)} MATIC(fee: 0.01 MATIC)✅`
-            // );
+            console.log(`${depositor} deposited ${ethers_1.ethers.utils.formatEther(amount)} MATIC(fee: 0.01 MATIC)✅`);
             // const oldBal = await tokenClone.balanceOf(depositor);
             // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATICc`);
             try {
-                yield tokenClone.mint(depositor, amount, nonce);
+                const tx = yield tokenClone.mint(depositor, amount, nonce);
+                yield tx.wait(1);
+                console.log(`minted ${ethers_1.ethers.utils.formatEther(amount)} MATICc to ${depositor}✅`);
             }
             catch (error) {
                 console.log("Error minting deposited amount!");
                 console.error(error);
             }
-            // const tx = await tokenClone.mint(depositor, amount, nonce);
-            // await tx.wait(1);
-            // console.log(`minted ${ethers.utils.formatEther(amount)} MATICc✅`);
             // const newBal = await tokenClone.balanceOf(depositor);
             // console.log(`new balance: ${ethers.utils.formatEther(newBal)} MATICc`);
             // console.log("-----");
@@ -90,21 +87,18 @@ app.listen(PORT, () => {
         console.log("listening for withdrawals...");
         // console.log("-----");
         tokenClone.on("Withdraw", (withdrawer, amount, nonce) => __awaiter(void 0, void 0, void 0, function* () {
-            // console.log(`burned ${ethers.utils.formatEther(amount)} MATICc`);
+            console.log(`${withdrawer} burned ${ethers_1.ethers.utils.formatEther(amount)} MATICc`);
             // const oldBal = await mumbaiProvider.getBalance(withdrawer);
             // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATIC`);
             try {
-                yield vault.transfer(withdrawer, amount, nonce);
+                const tx = yield vault.transfer(withdrawer, amount, nonce);
+                yield tx.wait(1);
+                console.log(`transferred ${ethers_1.ethers.utils.formatEther(amount)} MATIC✅ to ${withdrawer}`);
             }
             catch (error) {
                 console.log("Error transferring burned amount!");
                 console.error(error);
             }
-            // const tx = await vault.transfer(withdrawer, amount, nonce);
-            // await tx.wait(1);
-            // console.log(
-            //   `transferred ${ethers.utils.formatEther(amount)} MATIC✅ to depositor`
-            // );
             // const newBal = await mumbaiProvider.getBalance(withdrawer);
             // console.log(`new balance: ${ethers.utils.formatEther(newBal)} MATIC`);
             // console.log("-----");

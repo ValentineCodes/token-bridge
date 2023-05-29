@@ -55,23 +55,25 @@ app.listen(PORT, () => {
     // console.log("-----");
 
     vault.on("Deposit", async (depositor, amount, nonce) => {
-      // console.log(
-      //   `deposited ${ethers.utils.formatEther(amount)} MATIC(fee: 0.01 MATIC)✅`
-      // );
+      console.log(
+        `${depositor} deposited ${ethers.utils.formatEther(
+          amount
+        )} MATIC(fee: 0.01 MATIC)✅`
+      );
 
       // const oldBal = await tokenClone.balanceOf(depositor);
       // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATICc`);
 
       try {
-        await tokenClone.mint(depositor, amount, nonce);
+        const tx = await tokenClone.mint(depositor, amount, nonce);
+        await tx.wait(1);
+        console.log(
+          `minted ${ethers.utils.formatEther(amount)} MATICc to ${depositor}✅`
+        );
       } catch (error) {
         console.log("Error minting deposited amount!");
         console.error(error);
       }
-
-      // const tx = await tokenClone.mint(depositor, amount, nonce);
-      // await tx.wait(1);
-      // console.log(`minted ${ethers.utils.formatEther(amount)} MATICc✅`);
 
       // const newBal = await tokenClone.balanceOf(depositor);
       // console.log(`new balance: ${ethers.utils.formatEther(newBal)} MATICc`);
@@ -84,23 +86,25 @@ app.listen(PORT, () => {
     // console.log("-----");
 
     tokenClone.on("Withdraw", async (withdrawer, amount, nonce) => {
-      // console.log(`burned ${ethers.utils.formatEther(amount)} MATICc`);
+      console.log(
+        `${withdrawer} burned ${ethers.utils.formatEther(amount)} MATICc`
+      );
 
       // const oldBal = await mumbaiProvider.getBalance(withdrawer);
       // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATIC`);
 
       try {
-        await vault.transfer(withdrawer, amount, nonce);
+        const tx = await vault.transfer(withdrawer, amount, nonce);
+        await tx.wait(1);
+        console.log(
+          `transferred ${ethers.utils.formatEther(
+            amount
+          )} MATIC✅ to ${withdrawer}`
+        );
       } catch (error) {
         console.log("Error transferring burned amount!");
         console.error(error);
       }
-
-      // const tx = await vault.transfer(withdrawer, amount, nonce);
-      // await tx.wait(1);
-      // console.log(
-      //   `transferred ${ethers.utils.formatEther(amount)} MATIC✅ to depositor`
-      // );
 
       // const newBal = await mumbaiProvider.getBalance(withdrawer);
       // console.log(`new balance: ${ethers.utils.formatEther(newBal)} MATIC`);

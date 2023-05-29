@@ -62,7 +62,13 @@ app.listen(PORT, () => {
       // const oldBal = await tokenClone.balanceOf(depositor);
       // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATICc`);
 
-      await tokenClone.mint(depositor, amount, nonce);
+      try {
+        await tokenClone.mint(depositor, amount, nonce);
+      } catch (error) {
+        console.log("Error minting deposited amount!");
+        console.error(error);
+      }
+
       // const tx = await tokenClone.mint(depositor, amount, nonce);
       // await tx.wait(1);
       // console.log(`minted ${ethers.utils.formatEther(amount)} MATICc✅`);
@@ -82,7 +88,14 @@ app.listen(PORT, () => {
 
       // const oldBal = await mumbaiProvider.getBalance(withdrawer);
       // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} MATIC`);
-      await vault.transfer(withdrawer, amount, nonce);
+
+      try {
+        await vault.transfer(withdrawer, amount, nonce);
+      } catch (error) {
+        console.log("Error transferring burned amount!");
+        console.error(error);
+      }
+
       // const tx = await vault.transfer(withdrawer, amount, nonce);
       // await tx.wait(1);
       // console.log(

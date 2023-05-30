@@ -33,8 +33,8 @@ const L2TokenClone = JSON.parse(
   fs.readFileSync("./contracts/L2TokenClone.json", { encoding: "utf8" })
 );
 
-// console.log(`vault: ${L2TokenVault.address}`);
-// console.log(`tokenClone: ${L2TokenClone.address}`);
+console.log(`vault: ${L2TokenVault.address}`);
+console.log(`tokenClone: ${L2TokenClone.address}`);
 
 // contract instances
 const vault = new ethers.Contract(

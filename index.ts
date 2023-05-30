@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 const PROVIDER_API_KEY =
   process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";

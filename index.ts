@@ -7,48 +7,48 @@ const app = express();
 
 const PORT = process.env.PORT || 8000;
 
+const PROVIDER_API_KEY =
+  process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+const PRIVATE_KEY = process.env.PRIVATE_KEY!;
+
+// providers
+const mumbaiProvider = new ethers.providers.JsonRpcProvider(
+  `https://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`
+);
+const sepoliaProvider = new ethers.providers.JsonRpcProvider(
+  `https://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`
+);
+
+// signers
+const mumbaiSigner = new ethers.Wallet(PRIVATE_KEY).connect(mumbaiProvider);
+const sepoliaSigner = new ethers.Wallet(PRIVATE_KEY).connect(sepoliaProvider);
+
+// contracts
+const L2TokenVault = JSON.parse(
+  fs.readFileSync("./contracts/L2TokenVault.json", {
+    encoding: "utf8",
+  })
+);
+const L2TokenClone = JSON.parse(
+  fs.readFileSync("./contracts/L2TokenClone.json", { encoding: "utf8" })
+);
+
+console.log(`vault: ${L2TokenVault.address}`);
+console.log(`tokenClone: ${L2TokenClone.address}`);
+
+// contract instances
+const vault = new ethers.Contract(
+  L2TokenVault.address,
+  L2TokenVault.abi,
+  mumbaiSigner
+);
+const tokenClone = new ethers.Contract(
+  L2TokenClone.address,
+  L2TokenClone.abi,
+  sepoliaSigner
+);
+
 app.listen(PORT, () => {
-  const PROVIDER_API_KEY =
-    process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
-  const PRIVATE_KEY = process.env.PRIVATE_KEY!;
-
-  // providers
-  const mumbaiProvider = new ethers.providers.JsonRpcProvider(
-    `https://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`
-  );
-  const sepoliaProvider = new ethers.providers.JsonRpcProvider(
-    `https://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`
-  );
-
-  // signers
-  const mumbaiSigner = new ethers.Wallet(PRIVATE_KEY).connect(mumbaiProvider);
-  const sepoliaSigner = new ethers.Wallet(PRIVATE_KEY).connect(sepoliaProvider);
-
-  // contracts
-  const L2TokenVault = JSON.parse(
-    fs.readFileSync("./contracts/L2TokenVault.json", {
-      encoding: "utf8",
-    })
-  );
-  const L2TokenClone = JSON.parse(
-    fs.readFileSync("./contracts/L2TokenClone.json", { encoding: "utf8" })
-  );
-
-  console.log(`vault: ${L2TokenVault.address}`);
-  console.log(`tokenClone: ${L2TokenClone.address}`);
-
-  // contract instances
-  const vault = new ethers.Contract(
-    L2TokenVault.address,
-    L2TokenVault.abi,
-    mumbaiSigner
-  );
-  const tokenClone = new ethers.Contract(
-    L2TokenClone.address,
-    L2TokenClone.abi,
-    sepoliaSigner
-  );
-
   console.log(`Server running on port ${PORT}...`);
   const handleDeposits = async () => {
     console.log("listening for deposits...");

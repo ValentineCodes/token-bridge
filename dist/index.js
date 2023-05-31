@@ -41,7 +41,7 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const PROVIDER_API_KEY = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 // providers
@@ -55,8 +55,8 @@ const L2TokenVault = JSON.parse(fs.readFileSync("./contracts/L2TokenVault.json",
     encoding: "utf8",
 }));
 const L2TokenClone = JSON.parse(fs.readFileSync("./contracts/L2TokenClone.json", { encoding: "utf8" }));
-// console.log(`vault: ${L2TokenVault.address}`);
-// console.log(`tokenClone: ${L2TokenClone.address}`);
+console.log(`vault: ${L2TokenVault.address}`);
+console.log(`tokenClone: ${L2TokenClone.address}`);
 // contract instances
 const vault = new ethers_1.ethers.Contract(L2TokenVault.address, L2TokenVault.abi, mumbaiSigner);
 const tokenClone = new ethers_1.ethers.Contract(L2TokenClone.address, L2TokenClone.abi, sepoliaSigner);

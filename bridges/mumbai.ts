@@ -21,41 +21,41 @@ const sepoliaSigner = new ethers.Wallet(PRIVATE_KEY).connect(sepoliaProvider);
 
 // contracts
 const NativeTokenVault = JSON.parse(
-  fs.readFileSync("./contracts/sepolia/NativeTokenVault.json", {
+  fs.readFileSync("./contracts/mumbai/NativeTokenVault.json", {
     encoding: "utf8",
   })
 );
 const NativeTokenClone = JSON.parse(
-  fs.readFileSync("./contracts/sepolia/NativeTokenClone.json", {
+  fs.readFileSync("./contracts/mumbai/NativeTokenClone.json", {
     encoding: "utf8",
   })
 );
 
-console.log(`ETH vault: ${NativeTokenVault.address}`);
-console.log(`ETH Clone: ${NativeTokenClone.address}`);
+console.log(`MATIC vault: ${NativeTokenVault.address}`);
+console.log(`MATIC Clone: ${NativeTokenClone.address}`);
 
 // contract instances
 const vault = new ethers.Contract(
   NativeTokenVault.address,
   NativeTokenVault.abi,
-  sepoliaSigner
+  mumbaiSigner
 );
 const tokenClone = new ethers.Contract(
   NativeTokenClone.address,
   NativeTokenClone.abi,
-  mumbaiSigner
+  sepoliaSigner
 );
 
 export default () => {
   const handleDeposits = async () => {
-    console.log("listening for ETH deposits...");
+    console.log("listening for MATIC deposits...");
     // console.log("-----");
 
     vault.on("Deposit", async (depositor, amount, nonce) => {
       console.log(
         `${depositor} deposited ${ethers.utils.formatEther(
           amount
-        )} ETH(fee: 0.01 ETH)✅`
+        )} MATIC(fee: 0.01 MATIC)✅`
       );
 
       // const oldBal = await tokenClone.balanceOf(depositor);
@@ -65,7 +65,7 @@ export default () => {
         const tx = await tokenClone.mint(depositor, amount, nonce);
         await tx.wait(1);
         console.log(
-          `minted ${ethers.utils.formatEther(amount)} ETHc to ${depositor}✅`
+          `minted ${ethers.utils.formatEther(amount)} MATIC to ${depositor}✅`
         );
         console.log("----------");
       } catch (error) {
@@ -80,7 +80,7 @@ export default () => {
   };
 
   const handleWithdrawals = async () => {
-    console.log("listening for ETHc withdrawals...");
+    console.log("listening for MATICc withdrawals...");
     // console.log("-----");
 
     tokenClone.on("Withdraw", async (withdrawer, amount, nonce) => {

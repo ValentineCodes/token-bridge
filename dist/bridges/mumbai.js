@@ -48,29 +48,29 @@ const sepoliaProvider = new ethers_1.ethers.providers.JsonRpcProvider(`https://e
 const mumbaiSigner = new ethers_1.ethers.Wallet(PRIVATE_KEY).connect(mumbaiProvider);
 const sepoliaSigner = new ethers_1.ethers.Wallet(PRIVATE_KEY).connect(sepoliaProvider);
 // contracts
-const NativeTokenVault = JSON.parse(fs.readFileSync("./contracts/sepolia/NativeTokenVault.json", {
+const NativeTokenVault = JSON.parse(fs.readFileSync("./contracts/mumbai/NativeTokenVault.json", {
     encoding: "utf8",
 }));
-const NativeTokenClone = JSON.parse(fs.readFileSync("./contracts/sepolia/NativeTokenClone.json", {
+const NativeTokenClone = JSON.parse(fs.readFileSync("./contracts/mumbai/NativeTokenClone.json", {
     encoding: "utf8",
 }));
-console.log(`ETH vault: ${NativeTokenVault.address}`);
-console.log(`ETH Clone: ${NativeTokenClone.address}`);
+console.log(`MATIC vault: ${NativeTokenVault.address}`);
+console.log(`MATIC Clone: ${NativeTokenClone.address}`);
 // contract instances
-const vault = new ethers_1.ethers.Contract(NativeTokenVault.address, NativeTokenVault.abi, sepoliaSigner);
-const tokenClone = new ethers_1.ethers.Contract(NativeTokenClone.address, NativeTokenClone.abi, mumbaiSigner);
+const vault = new ethers_1.ethers.Contract(NativeTokenVault.address, NativeTokenVault.abi, mumbaiSigner);
+const tokenClone = new ethers_1.ethers.Contract(NativeTokenClone.address, NativeTokenClone.abi, sepoliaSigner);
 exports.default = () => {
     const handleDeposits = () => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("listening for ETH deposits...");
+        console.log("listening for MATIC deposits...");
         // console.log("-----");
         vault.on("Deposit", (depositor, amount, nonce) => __awaiter(void 0, void 0, void 0, function* () {
-            console.log(`${depositor} deposited ${ethers_1.ethers.utils.formatEther(amount)} ETH(fee: 0.01 ETH)✅`);
+            console.log(`${depositor} deposited ${ethers_1.ethers.utils.formatEther(amount)} MATIC(fee: 0.01 MATIC)✅`);
             // const oldBal = await tokenClone.balanceOf(depositor);
             // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} ETHc`);
             try {
                 const tx = yield tokenClone.mint(depositor, amount, nonce);
                 yield tx.wait(1);
-                console.log(`minted ${ethers_1.ethers.utils.formatEther(amount)} ETHc to ${depositor}✅`);
+                console.log(`minted ${ethers_1.ethers.utils.formatEther(amount)} MATIC to ${depositor}✅`);
                 console.log("----------");
             }
             catch (error) {
@@ -83,7 +83,7 @@ exports.default = () => {
         }));
     });
     const handleWithdrawals = () => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("listening for ETHc withdrawals...");
+        console.log("listening for MATICc withdrawals...");
         // console.log("-----");
         tokenClone.on("Withdraw", (withdrawer, amount, nonce) => __awaiter(void 0, void 0, void 0, function* () {
             console.log(`${withdrawer} burned ${ethers_1.ethers.utils.formatEther(amount)} ETHc`);

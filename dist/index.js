@@ -9,8 +9,10 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 // bridges
 const sepolia_1 = __importDefault(require("./bridges/sepolia"));
+const mumbai_1 = __importDefault(require("./bridges/mumbai"));
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}...`);
     (0, sepolia_1.default)();
+    (0, mumbai_1.default)();
 });

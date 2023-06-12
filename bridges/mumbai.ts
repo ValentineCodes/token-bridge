@@ -85,7 +85,7 @@ export default () => {
 
     tokenClone.on("Withdraw", async (withdrawer, amount, nonce) => {
       console.log(
-        `${withdrawer} burned ${ethers.utils.formatEther(amount)} ETHc`
+        `${withdrawer} burned ${ethers.utils.formatEther(amount)} MATICc`
       );
 
       // const oldBal = await mumbaiProvider.getBalance(withdrawer);
@@ -97,7 +97,7 @@ export default () => {
         console.log(
           `transferred ${ethers.utils.formatEther(
             amount
-          )} ETH✅ to ${withdrawer}`
+          )} MATIC✅ to ${withdrawer}`
         );
         console.log("----------");
       } catch (error) {

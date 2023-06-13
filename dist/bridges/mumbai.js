@@ -42,8 +42,8 @@ dotenv_1.default.config();
 const PROVIDER_API_KEY = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 // providers
-const mumbaiProvider = new ethers_1.ethers.providers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`);
-const sepoliaProvider = new ethers_1.ethers.providers.JsonRpcProvider(`https://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`);
+const mumbaiProvider = new ethers_1.ethers.providers.JsonRpcProvider(`wss://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`);
+const sepoliaProvider = new ethers_1.ethers.providers.JsonRpcProvider(`wss://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`);
 // signers
 const mumbaiSigner = new ethers_1.ethers.Wallet(PRIVATE_KEY).connect(mumbaiProvider);
 const sepoliaSigner = new ethers_1.ethers.Wallet(PRIVATE_KEY).connect(sepoliaProvider);
@@ -86,13 +86,13 @@ exports.default = () => {
         console.log("listening for MATICc withdrawals...");
         // console.log("-----");
         tokenClone.on("Withdraw", (withdrawer, amount, nonce) => __awaiter(void 0, void 0, void 0, function* () {
-            console.log(`${withdrawer} burned ${ethers_1.ethers.utils.formatEther(amount)} ETHc`);
+            console.log(`${withdrawer} burned ${ethers_1.ethers.utils.formatEther(amount)} MATICc`);
             // const oldBal = await mumbaiProvider.getBalance(withdrawer);
             // console.log(`old balance: ${ethers.utils.formatEther(oldBal)} ETH`);
             try {
                 const tx = yield vault.transfer(withdrawer, amount, nonce);
                 yield tx.wait(1);
-                console.log(`transferred ${ethers_1.ethers.utils.formatEther(amount)} ETH✅ to ${withdrawer}`);
+                console.log(`transferred ${ethers_1.ethers.utils.formatEther(amount)} MATIC✅ to ${withdrawer}`);
                 console.log("----------");
             }
             catch (error) {

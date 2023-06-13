@@ -9,10 +9,10 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
 // providers
 const mumbaiProvider = new ethers.providers.JsonRpcProvider(
-  `https://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`
+  `wss://polygon-mumbai.g.alchemy.com/v2/${PROVIDER_API_KEY}`
 );
 const sepoliaProvider = new ethers.providers.JsonRpcProvider(
-  `https://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`
+  `wss://eth-sepolia.g.alchemy.com/v2/${PROVIDER_API_KEY}`
 );
 
 // signers
